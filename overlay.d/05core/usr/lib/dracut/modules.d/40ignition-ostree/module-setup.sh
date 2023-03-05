@@ -101,4 +101,6 @@ install() {
         /usr/libexec/coreos-check-rootfs-size
 
     inst_script "$moddir/coreos-relabel" /usr/bin/coreos-relabel
+
+    inst_script "$moddir/coreos-relabel-wzh" /usr/bin/coreos-relabel-wzh
 }

@@ -250,7 +250,7 @@ add_requires sysroot-var.mount initrd-root-fs.target
 # Type=oneshot
 # RemainAfterExit=yes
 # # We don't need the full relabeling spam by default for these
-# StandardOutput=journal+console
+# StandardOutput=null
 # ExecStart=/bin/coreos-relabel /etc
 # ExecStart=/bin/coreos-relabel /var
 # EOF
@@ -268,3 +268,18 @@ add_requires sysroot-var.mount initrd-root-fs.target
 # ExecStart=false
 # EOF
 # add_requires wzh-fail.service initrd-root-fs.target
+
+cat >>"${UNIT_DIR}/sysroot-relabel.service" <<EOF
+[Unit]
+DefaultDependencies=false
+RequiresMountsFor=/sysroot/etc /sysroot/var
+Before=initrd-root-fs.target
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+# We don't need the full relabeling spam by default for these
+StandardOutput=null
+ExecStart=chroot /sysroot /bin/coreos-relabel-wzh /etc
+ExecStart=chroot /sysroot /bin/coreos-relabel-wzh /var
+EOF
+add_requires sysroot-relabel.service initrd-root-fs.target
