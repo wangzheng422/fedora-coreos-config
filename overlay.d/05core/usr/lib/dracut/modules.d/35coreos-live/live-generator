@@ -172,7 +172,7 @@ ConditionPathExists=!/run/ephemeral
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/bin/sh -c 'set -euo pipefail; mem=$$(($$(stat -f -c "%%b * %%s / 1024" /run))) && /bin/truncate -s $${mem}k /run/ephemeral.xfsloop'
-ExecStart=/sbin/mkfs.xfs /run/ephemeral.xfsloop
+ExecStart=/sbin/mkfs.xfs -n ftype=1 /run/ephemeral.xfsloop
 ExecStart=/bin/mkdir /run/ephemeral
 EOF
 add_requires sysroot-xfs-ephemeral-mkfs.service initrd-root-fs.target
