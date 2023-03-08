@@ -1,42 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-err() {
-    echo "$@" >&2
-}
-
-fatal() {
-    err "$@"
-    exit 1
-}
-
+chroot /sysroot
 mount -t sysfs sysfs /sys
 mount -t selinuxfs selinuxfs /sys/fs/selinux
 /sbin/load_policy
 
-if [ $# -eq 0 ]; then
-    err "Usage: $0 [PATTERN...]"
-    err " e.g.: $0 /etc/passwd '/etc/group*'"
-fi
-
-if [ ! -f /etc/selinux/config ]; then
-    exit 0
-fi
-
-source /etc/selinux/config
-
-if [ -z "${SELINUXTYPE:-}" ]; then
-    fatal "Couldn't find SELINUXTYPE in /etc/selinux/config"
-fi
-
-file_contexts="/etc/selinux/${SELINUXTYPE}/contexts/files/file_contexts"
-
-prefixed_patterns=()
-while [ $# -ne 0 ]; do
-    pattern=$1; shift
-    prefixed_patterns+=("/$pattern")
-done
-setfiles -vFi0  "$file_contexts" "${prefixed_patterns[@]}"
-
-umount /sys/fs/selinux
-umount /sys
+exit
