@@ -13,4 +13,6 @@ Before=ignition-files.service
 [Service]
 Type=oneshot
 RemainAfterExit=yes
+ExecStart=/bin/cp -f /bin/coreos-relabel-wzh /sysroot/etc/ 
+ExecStart=chroot /sysroot /etc/coreos-relabel-wzh
 ExecStart=/usr/sbin/ignition-ostree-populate-var
