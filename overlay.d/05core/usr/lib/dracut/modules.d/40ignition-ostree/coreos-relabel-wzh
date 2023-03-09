@@ -5,7 +5,7 @@ chroot /sysroot
 
 mount -t sysfs sysfs /sys
 mount -t selinuxfs selinuxfs /sys/fs/selinux
-/sbin/load_policy
+/sbin/load_policy -i
 
 umount /sys/fs/selinux
 umount /sys
