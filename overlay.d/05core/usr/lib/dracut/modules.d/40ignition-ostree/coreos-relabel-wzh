@@ -1,8 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-chroot /sysroot
-
 mount -t sysfs sysfs /sys
 mount -t selinuxfs selinuxfs /sys/fs/selinux
 /sbin/load_policy -i
@@ -10,6 +8,4 @@ mount -t selinuxfs selinuxfs /sys/fs/selinux
 umount /sys/fs/selinux
 umount /sys
 
-exit
-
-systemctl --root=/sysroot enable debug-shell.service
+# systemctl --root=/sysroot enable debug-shell.service

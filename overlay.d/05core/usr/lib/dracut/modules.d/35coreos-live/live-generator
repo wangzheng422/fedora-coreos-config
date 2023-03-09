@@ -251,11 +251,12 @@ Type=oneshot
 RemainAfterExit=yes
 # We don't need the full relabeling spam by default for these
 StandardOutput=null
-ExecStart=/bin/coreos-relabel-wzh
+# ExecStart=/bin/cp -f /bin/coreos-relabel-wzh /sysroot/etc/coreos-relabel-wzh && chmod +x /sysroot/etc/coreos-relabel-wzh
+# ExecStart=chroot /sysroot /etc/coreos-relabel-wzh
 ExecStart=/bin/coreos-relabel /etc
 ExecStart=/bin/coreos-relabel /var
-ExecStart=/sbin/setfiles -ivF0 /sysroot/etc/selinux/targeted/contexts/files/file_contexts /dev
-ExecStart=/sbin/setfiles -ivF0 /sysroot/etc/selinux/targeted/contexts/files/file_contexts /run
+# ExecStart=/sbin/setfiles /sysroot/etc/selinux/targeted/contexts/files/file_contexts /dev
+# ExecStart=/sbin/setfiles /sysroot/etc/selinux/targeted/contexts/files/file_contexts /run
 EOF
 add_requires sysroot-relabel.service initrd-root-fs.target
 
