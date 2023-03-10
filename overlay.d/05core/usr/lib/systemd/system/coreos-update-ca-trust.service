@@ -23,7 +23,6 @@ After=local-fs.target
 Requires=local-fs.target
 
 [Service]
-ExecStart=/bin/bash /usr/libexec/wzh-fix.sh
 ExecStart=/usr/bin/update-ca-trust extract
 Type=oneshot
 RemainAfterExit=yes
