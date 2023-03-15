@@ -172,7 +172,7 @@ ConditionPathExists=!/run/ephemeral
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/bin/sh -c 'set -euo pipefail; mem=$$(($$(stat -f -c "%%b * %%s / 1024" /run))) && /bin/truncate -s $${mem}k /run/ephemeral.xfsloop'
-ExecStart=/sbin/mkfs.xfs -n ftype=1 /run/ephemeral.xfsloop
+ExecStart=/sbin/mkfs.xfs /run/ephemeral.xfsloop
 ExecStart=/bin/mkdir /run/ephemeral
 EOF
 add_requires sysroot-xfs-ephemeral-mkfs.service initrd-root-fs.target
@@ -259,33 +259,3 @@ ExecStart=/sbin/setfiles /sysroot/etc/selinux/targeted/contexts/files/file_conte
 ExecStart=/sbin/setfiles /sysroot/etc/selinux/targeted/contexts/files/file_contexts /run
 EOF
 add_requires sysroot-relabel.service initrd-root-fs.target
-
-# cat >>"${UNIT_DIR}/wzh-fail.service" <<EOF
-# [Unit]
-# DefaultDependencies=false
-# RequiresMountsFor=/sysroot/etc /sysroot/var
-# Before=initrd-root-fs.target
-# [Service]
-# Type=oneshot
-# RemainAfterExit=yes
-# # We don't need the full relabeling spam by default for these
-# ExecStart=false
-# EOF
-# add_requires wzh-fail.service initrd-root-fs.target
-
-# cat >>"${UNIT_DIR}/sysroot-relabel.service" <<EOF
-# [Unit]
-# DefaultDependencies=false
-# RequiresMountsFor=/sysroot/etc /sysroot/var
-# Before=initrd-root-fs.target
-# [Service]
-# Type=oneshot
-# RemainAfterExit=yes
-# # We don't need the full relabeling spam by default for these
-# StandardOutput=null
-# ExecStart=/bin/cp -f /bin/coreos-relabel-wzh /sysroot/etc/
-# ExecStart=chmod +x /sysroot/etc/coreos-relabel-wzh
-# ExecStart=chroot /sysroot /etc/coreos-relabel-wzh /etc
-# ExecStart=chroot /sysroot /etc/coreos-relabel-wzh /var
-# EOF
-# add_requires sysroot-relabel.service initrd-root-fs.target
